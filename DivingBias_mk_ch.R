@@ -1,21 +1,15 @@
----
-title: "Judge Bias Analysis"
-author: 'Author: Meng Kuang(mk2297), Member: Cheng Hua(ch835)'
-date: "10/31/2016"
-output: pdf_document
----
+
 ## Step 1: Get Judge Information(Name & Country)
 
-```{r ref}
+
 data <- read.csv(file="Diving2012csv", as.is = TRUE)
 UniRef <- data.frame(Judge=unique(data$Judge), JCountry=rep(NA,length(unique(data$Judge))))
 UniRef$JCountry <- apply(as.matrix(UniRef$Judge),1,function(x) data$JCountry[which(data$Judge==x)[1]])
-```
+
 
 ## Step 2: Analysis of Judging Bias by T-test
 
-Main ideas dedicated to the MathHorizons paper. Define Judge Bias as "a biased judge is one who awards higher scores than other judges to his own countrymen, but fails to award higher scores to non-countrymen".
-```{r diving}
+
 # Match the nationality of judges and divers
 data$match <- data$Country == data$JCountry
 
@@ -43,10 +37,7 @@ for (thisjudge in UniRef[ismatch,1]) {
   UniRef[UniRef[,1]==thisjudge, 5] <- mean(y$discrepancy[!y$match],na.rm = TRUE)
 }
 
-```
 
-## Step 3: Produce Main Table of Results. 
-```{r table, message=TRUE,results="asis" , echo= TRUE}
 library("xtable")
 
 # Paste judge name and country into one column
@@ -73,11 +64,10 @@ names(mytable)<- c("Judge", "Number of Matched Dives", "Average Discrepancy for 
 yourtable <- xtable(mytable, hline.after=c(-1, 0), align= c("|c|", "p{0.3\\textwidth}|", "p{0.07\\textwidth}|", "p{0.1\\textwidth}|", "p{0.1\\textwidth}|", "p{0.1\\textwidth}|", "p{0.1\\textwidth}|", "p{0.05\\textwidth}|"))
 print(yourtable, include.rownames = FALSE )
 
-# Please see the table on the last page.
-```
+
 
 ## Step 4: Analysis of the Results
-```{r}
+
 # Find the most and least biased judges according to p-value
 # High p-values indicate the discrepancy is likely assuming judge had been unbiased.
 # So the higher the p-value is, the least biased a judge is.
@@ -128,5 +118,5 @@ abline(v=mean(y3$discrepancy[!y3$match],na.rm = TRUE),col="red",lwd=3,lty=3)
 sum(mytable$`p-value`< 0.1) /dim(mytable)[1]
 
 # It reveals that nationalistic bias was prevalent in 2012 Olympic diving Competition
-```
+
 
