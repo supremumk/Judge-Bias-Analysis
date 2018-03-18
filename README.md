@@ -5,7 +5,7 @@ Our analysis reveals that nationalistic bias was prevalent in 2012 Olympic divin
 
 ## Step 1: Get Judge Information(Name & Country)
 
-```{r ref}
+```r
 data <- read.csv(file="Diving2012csv", as.is = TRUE)
 UniRef <- data.frame(Judge=unique(data$Judge), JCountry=rep(NA,length(unique(data$Judge))))
 UniRef$JCountry <- apply(as.matrix(UniRef$Judge),1,function(x) data$JCountry[which(data$Judge==x)[1]])
@@ -14,7 +14,7 @@ UniRef$JCountry <- apply(as.matrix(UniRef$Judge),1,function(x) data$JCountry[whi
 ## Step 2: Analysis of Judging Bias by T-test
 
 Main ideas dedicated to the MathHorizons paper. Define Judge Bias as "a biased judge is one who awards higher scores than other judges to his own countrymen, but fails to award higher scores to non-countrymen".
-```{r diving}
+```r
 # Match the nationality of judges and divers
 data$match <- data$Country == data$JCountry
 
