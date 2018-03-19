@@ -23,24 +23,28 @@ below the panel average, and suspicious positive discrepancies might be evidence
 
 ## Step 4: Analysis of the Results
 
-# Find the most and least biased judges according to p-value
-# High p-values indicate the discrepancy is likely assuming judge had been unbiased.
-# So the higher the p-value is, the least biased a judge is.
-
-# Find the most biased judge with lowest p-value
+ -Find the most and least biased judges according to p-value.
+ -High p-values indicate the discrepancy is likely assuming judge had been unbiased.
+ -So the higher the p-value is, the least biased a judge is.
 
 
-# Find the least biased judge with highest p-value
+#### Find the most biased judge with lowest p-value
+ ![alt tag](https://github.com/supremumk/Judge-Bias-Analysis/blob/master/most_bias_judge.png)
 
 
-# We assume that judges bias towards their own country, but the least biased judge is not biased toward his matching 
-# country according to the histogram.
-# So next we find the least biased judge toward his own country by limiting DoAd > 0
+#### Find the least biased judge with highest p-value
+ ![alt tag](https://github.com/supremumk/Judge-Bias-Analysis/blob/master/least_bias_judge.png)
 
-# The proportion of p-values < 0.1
+
+ We assume that judges bias towards their own country, but the least biased judge is not biased toward his matching 
+ country according to the histogram.
+ So next we find the least biased judge toward his own country by limiting DoAd > 0
+  ![alt tag](https://github.com/supremumk/Judge-Bias-Analysis/blob/master/least_bias_real.png)
+
+###### The proportion of p-values < 0.1
 sum(mytable$`p-value`< 0.1) /dim(mytable)[1]=0.4375
 
-# It reveals that nationalistic bias was prevalent in 2012 Olympic diving Competition
-```
+##### It reveals that nationalistic bias was prevalent in 2012 Olympic diving Competition
+
 
 
