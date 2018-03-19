@@ -2,7 +2,7 @@
 ## Step 1: Get Judge Information(Name & Country)
 
 
-data <- read.csv(file="Diving2012csv", as.is = TRUE)
+data <- read.csv(file="Diving2012.csv", as.is = TRUE)
 UniRef <- data.frame(Judge=unique(data$Judge), JCountry=rep(NA,length(unique(data$Judge))))
 UniRef$JCountry <- apply(as.matrix(UniRef$Judge),1,function(x) data$JCountry[which(data$Judge==x)[1]])
 
