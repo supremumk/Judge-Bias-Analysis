@@ -41,10 +41,10 @@ below the panel average, and suspicious positive discrepancies might be evidence
  So next we find the least biased judge toward his own country by limiting DoAd > 0
   ![alt tag](https://github.com/supremumk/Judge-Bias-Analysis/blob/master/least_bias_real.png)
 
-###### The proportion of p-values < 0.1
+##### The proportion of p-values < 0.1
 sum(mytable$`p-value`< 0.1) /dim(mytable)[1]=0.4375
 
-##### It reveals that nationalistic bias was prevalent in 2012 Olympic diving Competition
+#### It reveals that nationalistic bias was prevalent in 2012 Olympic diving Competition.
 
 
 
