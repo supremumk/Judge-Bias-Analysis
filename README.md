@@ -13,67 +13,16 @@ UniRef$JCountry <- apply(as.matrix(UniRef$Judge),1,function(x) data$JCountry[whi
 
 ## Step 2: Analysis of Judging Bias by T-test
 
-Main ideas dedicated to the MathHorizons paper. Define Judge Bias as "a biased judge is one who awards higher scores than other judges to his own countrymen, but fails to award higher scores to non-countrymen".
-```r
-# Match the nationality of judges and divers
-data$match <- data$Country == data$JCountry
+Main ideas dedicated to the [MathHorizons paper](http://www.stat.yale.edu/~jay/EmersonMaterials/MathHorizons.pdf).
 
-# Calculate untrimmed mean, showing a judge's tendency to differ from other judges
-temp <- tapply(as.numeric(data$JScore),rep(1:(nrow(data)/7), each=7), mean) 
-data$avg <- rep(temp, each=7)
-# Calculate the difference between a particular judge's score and the untrimmed mean 
-data$discrepancy <- as.numeric(data$JScore) - data$avg
+Define Judge Bias as "a biased judge is one who awards higher scores than other judges to his own countrymen, but fails to award higher scores to non-countrymen".
 
-# Find judges whose nationality matched that of the particular diver.
-ismatch <- apply(as.matrix(UniRef[,1]),1,function(x) sum(data$match[data$Judge==x])>0)
-UniRef$p.value <- rep(0, length(ismatch))
-UniRef$ADmatch <- rep(0, length(ismatch))
-UniRef$ADnomatch <- rep(0, length(ismatch))
-
-# Judge loop begins here
-for (thisjudge in UniRef[ismatch,1]) {
-  y <- data[data$Judge==thisjudge,]
-  # T-test assuming judges bias towards their own countrymen
-  # H0: no bias
-  # H1: bias
-  test <- t.test(y$discrepancy[y$match],y$discrepancy[!y$match], alternative="great")
-  UniRef[UniRef[,1]==thisjudge, 3] <- test$p.value
-  UniRef[UniRef[,1]==thisjudge, 4] <- mean(y$discrepancy[y$match])
-  UniRef[UniRef[,1]==thisjudge, 5] <- mean(y$discrepancy[!y$match],na.rm = TRUE)
-}
-
-```
+Define “discrepancy” as the difference between a particular judge‟s score and the untrimmed mean of all 7 judges‟ scores. (We use the untrimmed mean because we are interested a judge's tendency to differ from other judges; we are not studying effects on thefinal calculated score, a topic for a different study.) A negative discrepancy indicates a score
+below the panel average, and suspicious positive discrepancies might be evidence of bias.
 
 ## Step 3: Produce Main Table of Results. 
-```r
-library("xtable")
 
-# Paste judge name and country into one column
-
-UniRef[,6] <- paste(UniRef[,1]," (",UniRef[,2],")",sep="")
-UniRef[,6] <- gsub("[A-Z]( [A-Z][a-z]+)",",\\1",UniRef[,6])
-UniRef <- UniRef[ismatch,]
-
-# Find number of Matched Dives
-
-matchnum <- apply(as.matrix(UniRef[, 1]), 1, function(x) sum(data$match[data$Judge==x]))
-
-# Find number of Non-Matched Dives
-
-nonmatchnum <- apply(as.matrix(UniRef[, 1]), 1, function(x) sum(data$match[data$Judge!= x]))
-
-# Create the table of results
-
-mytable <- data.frame(UniRef[, 6],  matchnum, UniRef$ADmatch, nonmatchnum,
-                      UniRef$ADnomatch,UniRef[, 4]-UniRef[, 5],UniRef$p.value)
-names(mytable)<- c("Judge", "Number of Matched Dives", "Average Discrepancy for Matched Dives",
-                   "Number of Non-Matched Dives", "Average Discrepancy for Non-Matched Dives",
-                   "Difference of Average Discrepancies(DoAD)", "p-value")
-yourtable <- xtable(mytable, hline.after=c(-1, 0), align= c("|c|", "p{0.3\\textwidth}|", "p{0.07\\textwidth}|", "p{0.1\\textwidth}|", "p{0.1\\textwidth}|", "p{0.1\\textwidth}|", "p{0.1\\textwidth}|", "p{0.05\\textwidth}|"))
-print(yourtable, include.rownames = FALSE )
-
-# Please see the table on the last page.
-```
+![alt tag](https://github.com/supremumk/Judge-Bias-Analysis/blob/master/discre_table.png)
 
 ## Step 4: Analysis of the Results
 ```r
